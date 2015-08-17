@@ -1,0 +1,30 @@
+{
+	"name": "brokenjs",
+	"version": "1.0.2",
+	"homepage": "https://github.com/juancamiloestela/Broken.js",
+	"authors": [
+		
+	],
+	"dependencies": {
+		"jquery": ">=1.6"
+	},
+	"description": "Replace broken images with a placeholder, ideal for rapid wireframing on the browser.",
+	"main": [
+		"dist/js/broken.js"
+	],
+	"keywords": [
+		"broken",
+		"error",
+		"images",
+		"ui",
+		"front-end"
+	],
+	"license": "MIT",
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"test",
+		"tests"
+	]
+}
