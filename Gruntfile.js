@@ -44,6 +44,41 @@ module.exports = function(grunt) {
 			}
 		},
 
+		// Less compiler
+		less: {
+			css: {
+				files: {
+					'<%= dev %>/css/<%= pkg.name %>.css': '<%= dev %>/less/<%= pkg.name %>.less'
+				},
+				options: {
+					sourceMap: true,
+					sourceMapFilename: '<%= dev %>/css/<%= pkg.name %>.css.map',
+					sourceMapRootpath: '../../',
+					sourceMapURL: '<%= pkg.name %>.css.map'
+				},
+			}
+		},
+
+		// Auto vendor prefixes
+		autoprefixer: {
+			options: {
+				browsers: ['last 4 versions']
+			},
+			css: {
+				files: {
+					'<%= dev %>/css/<%= pkg.name %>.css': '<%= dev %>/css/<%= pkg.name %>.css'
+				}
+			}
+		},
+
+		cssmin: {
+			dist: {
+				files: {
+					'<%= dev %>/css/<%= pkg.name %>.min.css': ['<%= dev %>/css/<%= pkg.name %>.css'],
+				}
+			}
+		},
+
 		notify: {
 			task_name: {
 				options: {
@@ -78,23 +113,29 @@ module.exports = function(grunt) {
 		},
 
 		version: {
-			options: {
-				release: 'patch'
+			options:{
+				prefix: '(\\* |")[Vv]ersion[\'"]?\\s*[:=]?\\s*[\'"]?'
+			},
+			defaults: {
+				src: ['bower.json', '<%= dev %>/src/*.js', '<%= dev %>/less/*.css']
 			},
 			patch: {
-				src: ['package.json', 'bower.json', '<%= prod %>/js/*.js', '<%= prod %>/css/*.css']
+				options: {
+					release: 'patch'
+				},
+				src: ['package.json', 'bower.json', '<%= dev %>/src/*.js', '<%= dev %>/less/*.css']
 			},
 			minor:{
 				options: {
 					release: 'minor'
 				},
-				src: ['package.json', 'bower.json', '<%= prod %>/js/*.js', '<%= prod %>/css/*.css']
+				src: ['package.json', 'bower.json', '<%= dev %>/src/*.js', '<%= dev %>/less/*.css']
 			},
 			major:{
 				options: {
 					release: 'major'
 				},
-				src: ['package.json', 'bower.json', '<%= prod %>/js/*.js', '<%= prod %>/css/*.css']
+				src: ['package.json', 'bower.json', '<%= dev %>/src/*.js', '<%= dev %>/less/*.css']
 			}
 		},
 
@@ -113,13 +154,16 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-less');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-autoprefixer');
 	grunt.loadNpmTasks('grunt-notify');
 	grunt.loadNpmTasks('grunt-version');
 	grunt.loadNpmTasks('grunt-newer');
 
 	// Default task(s).
-	grunt.registerTask('default', ['jshint', 'concat', 'uglify']);
-	grunt.registerTask('build', ['default', 'clean', 'copy:main', 'version:patch']);
+	grunt.registerTask('default', ['jshint', 'version:defaults', 'concat', 'uglify', 'less', 'autoprefixer', 'cssmin']);
+	grunt.registerTask('build', ['version:patch', 'default', 'clean', 'copy:main']);
 	grunt.registerTask('minor', ['build', 'version:minor']);
 	grunt.registerTask('major', ['build', 'version:major']);
 };
