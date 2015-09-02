@@ -1,4 +1,4 @@
-/*! broken-js - v0.0.2 - 2015-08-17 *//*!
+/*! broken-js - v0.0.2 - 2015-09-01 *//*!
  * Broken.js
  * http://www.github.com/juancamiloestela/select.js
  * MIT licensed
